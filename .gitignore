@@ -1,0 +1,11 @@
+node_modules/
+data/
+.env
+.env.local
+.local/
+.next/
+out/
+*.tsbuildinfo
+.DS_Store
+.codex/hooks.json
+.impeccable/config.local.json
