@@ -10,7 +10,7 @@ Share links are signed with `NEXTAUTH_SECRET`; changing that secret invalidates 
 
 ## API tokens and MCP
 
-Sign in with Kanidm and open **API tokens** in the sidebar. Name a token, choose read-only or read/write access, and choose its expiry. Copy the token when it appears: Recipi stores only its SHA-256 hash and cannot show it again. You can revoke your tokens from the same page. Tokens belong to the household you were in when created and expire after 30, 90, or 365 days. A Kanidm sign-in is required to create and revoke them; a token cannot manage tokens.
+Sign in with Kanidm and open **API tokens** in the sidebar. Name a token, choose read-only or read/write access, and choose its expiry (30, 90, or 365 days, or never). Copy the token when it appears: Recipi stores only its SHA-256 hash and cannot show it again. You can revoke your tokens from the same page. Tokens belong to the household you were in when created. A Kanidm sign-in is required to create and revoke them; a token cannot manage tokens.
 
 Use the token as `Authorization: Bearer <token>` with the JSON recipe API (`/api/recipes` and `/api/recipes/:id`), the image API (`/api/images` and `/api/images/:id`), or the share API (`/api/recipes/:id/share`). Read-only tokens can list and retrieve. Read/write tokens can also add, edit, delete, upload images, and manage public links. The existing browser session works as before.
 

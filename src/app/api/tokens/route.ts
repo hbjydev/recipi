@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     !label ||
     label.length > 80 ||
     (permission !== "read" && permission !== "write") ||
-    (days !== 30 && days !== 90 && days !== 365)
+    (days !== null && days !== 30 && days !== 90 && days !== 365)
   ) {
     return reply({ error: "Choose a name, permission, and expiry" }, 400);
   }
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
         member.userId,
         label,
         permission as TokenPermission,
-        days as 30 | 90 | 365,
+        days as 30 | 90 | 365 | null,
       ),
       201,
     );

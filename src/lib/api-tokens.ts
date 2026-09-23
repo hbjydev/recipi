@@ -56,7 +56,7 @@ export async function createApiToken(
   userId: string,
   label: string,
   permission: TokenPermission,
-  days: 30 | 90 | 365,
+  days: 30 | 90 | 365 | null,
 ): Promise<{ token: string; summary: TokenSummary }> {
   const db = await database();
   const id = randomUUID();
@@ -74,7 +74,7 @@ export async function createApiToken(
           eq(apiTokens.householdId, householdId),
           eq(apiTokens.userId, userId),
           isNull(apiTokens.revokedAt),
-          gt(apiTokens.expiresAt, sql`now()`),
+          or(isNull(apiTokens.expiresAt), gt(apiTokens.expiresAt, sql`now()`)),
         ),
       );
     if (active.count >= 20) return null;
@@ -87,7 +87,7 @@ export async function createApiToken(
         label,
         tokenHash: hash(token).toString("hex"),
         permission,
-        expiresAt: sql`now() + ${days} * interval '1 day'`,
+        expiresAt: days === null ? null : sql`now() + ${days} * interval '1 day'`,
       })
       .returning();
     return created;

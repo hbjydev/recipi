@@ -13,7 +13,7 @@ export default function TokenManager({
   const [tokens, setTokens] = useState(initialTokens);
   const [label, setLabel] = useState("");
   const [permission, setPermission] = useState<TokenPermission>("read");
-  const [days, setDays] = useState<30 | 90 | 365>(90);
+  const [days, setDays] = useState<30 | 90 | 365 | null>(90);
   const [newToken, setNewToken] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -88,8 +88,8 @@ export default function TokenManager({
           <span className="eyebrow">NEW CONNECTION</span>
           <h2>Create a token</h2>
           <p>
-            Use a token with the Recipi API or an MCP client. It expires automatically and you can
-            revoke it at any time.
+            Use a token with the Recipi API or an MCP client. Choose an expiry or keep it active
+            until you revoke it.
           </p>
           <form onSubmit={(event) => void create(event)}>
             <label className="field">
@@ -116,9 +116,12 @@ export default function TokenManager({
               <label className="field">
                 <span>Expires in</span>
                 <select
-                  value={days}
-                  onChange={(event) => setDays(Number(event.target.value) as 30 | 90 | 365)}
+                  value={days ?? "never"}
+                  onChange={(event) =>
+                    setDays(event.target.value === "never" ? null : (Number(event.target.value) as 30 | 90 | 365))
+                  }
                 >
+                  <option value="never">Never</option>
                   <option value={30}>30 days</option>
                   <option value={90}>90 days</option>
                   <option value={365}>1 year</option>
