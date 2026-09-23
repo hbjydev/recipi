@@ -131,7 +131,7 @@ export async function verifyApiToken(
       and(
         eq(apiTokens.id, match[1]),
         isNull(apiTokens.revokedAt),
-        gt(apiTokens.expiresAt, sql`now()`),
+        or(isNull(apiTokens.expiresAt), gt(apiTokens.expiresAt, sql`now()`)),
       ),
     )
     .limit(1);
