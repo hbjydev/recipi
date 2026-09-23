@@ -74,6 +74,8 @@ Register `https://recipi.hayden.moe/api/auth/callback/kanidm` as the OIDC redire
 
 The container exposes port 3000 and `/api/healthz` for a probe. Keep a single app replica until migrations and multi-replica rollout have been tested. Recipes are stored in Postgres; uploaded images are stored in a private S3 bucket and served through an authenticated or share-checked app route. Images are limited to 5 MB and JPEG, PNG, or WebP. An upload that is never saved to a recipe can leave an unused object; bucket lifecycle cleanup is a future improvement.
 
+GitHub Actions runs formatting, linting, type checking, the production build, Docker-backed integration tests, and a container build on pull requests. Pushing to `main` or a `v*` tag runs the same app checks before publishing `ghcr.io/hbjydev/recipi`. The image gets a full-commit `sha-...` tag plus `main` or the version number (for example, `1.2.3` for `v1.2.3`). Pin the image digest for immutable deployments; grant the deployment environment access to the GHCR package if it is private. No deployment secrets are needed by these workflows.
+
 `deploy/phoebe` contains a Flux/app-template starting point matching Phoebe's current Postgres and Kanidm components. Build and publish the image, replace the image repository and tag in the HelmRelease, provision the private S3 bucket and `recipi-s3` credential Secret (or adjust the template for workload credentials), copy that directory to `kubernetes/apps/selfhosted/recipi` in Phoebe, and add `./recipi/ks.yaml` to `kubernetes/apps/selfhosted/kustomization.yaml`. Review the hostname and group membership before Flux reconciles it. The manifests are a template in this repository; they are not applied to Phoebe yet.
 
 ## Project layout
