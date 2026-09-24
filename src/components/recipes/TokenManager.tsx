@@ -129,7 +129,6 @@ export default function TokenManager({
                   <option value={30}>30 days</option>
                   <option value={90}>90 days</option>
                   <option value={365}>1 year</option>
-                  <option value={null}>No expiry</option>
                 </select>
               </label>
             </div>
