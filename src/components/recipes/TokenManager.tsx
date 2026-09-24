@@ -118,13 +118,18 @@ export default function TokenManager({
                 <select
                   value={days ?? "never"}
                   onChange={(event) =>
-                    setDays(event.target.value === "never" ? null : (Number(event.target.value) as 30 | 90 | 365))
+                    setDays(
+                      event.target.value === "never"
+                        ? null
+                        : (Number(event.target.value) as 30 | 90 | 365),
+                    )
                   }
                 >
                   <option value="never">Never</option>
                   <option value={30}>30 days</option>
                   <option value={90}>90 days</option>
                   <option value={365}>1 year</option>
+                  <option value={null}>No expiry</option>
                 </select>
               </label>
             </div>

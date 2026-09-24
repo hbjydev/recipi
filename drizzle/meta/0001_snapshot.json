@@ -1,1 +1,335 @@
-{"id":"6cfc49fc-601e-4627-b041-777b5f44980e","prevId":"0c7538ad-5019-4323-ba65-597979ac9c73","version":"7","dialect":"postgresql","tables":{"public.api_tokens":{"name":"api_tokens","schema":"","columns":{"id":{"name":"id","type":"uuid","primaryKey":true,"notNull":true},"household_id":{"name":"household_id","type":"text","primaryKey":false,"notNull":true},"user_id":{"name":"user_id","type":"text","primaryKey":false,"notNull":true},"label":{"name":"label","type":"text","primaryKey":false,"notNull":true},"token_hash":{"name":"token_hash","type":"text","primaryKey":false,"notNull":true},"permission":{"name":"permission","type":"text","primaryKey":false,"notNull":true},"created_at":{"name":"created_at","type":"timestamp with time zone","primaryKey":false,"notNull":true,"default":"now()"},"expires_at":{"name":"expires_at","type":"timestamp with time zone","primaryKey":false,"notNull":false},"last_used_at":{"name":"last_used_at","type":"timestamp with time zone","primaryKey":false,"notNull":false},"revoked_at":{"name":"revoked_at","type":"timestamp with time zone","primaryKey":false,"notNull":false}},"indexes":{"api_tokens_owner_created":{"name":"api_tokens_owner_created","columns":[{"expression":"household_id","isExpression":false,"asc":true,"nulls":"last"},{"expression":"user_id","isExpression":false,"asc":true,"nulls":"last"},{"expression":"created_at","isExpression":false,"asc":false,"nulls":"last"}],"isUnique":false,"concurrently":false,"method":"btree","with":{}}},"foreignKeys":{},"compositePrimaryKeys":{},"uniqueConstraints":{"api_tokens_token_hash_unique":{"name":"api_tokens_token_hash_unique","nullsNotDistinct":false,"columns":["token_hash"]}},"policies":{},"checkConstraints":{"api_tokens_permission_check":{"name":"api_tokens_permission_check","value":"\"api_tokens\".\"permission\" IN ('read', 'write')"}},"isRLSEnabled":false},"public.ingredients":{"name":"ingredients","schema":"","columns":{"recipe_id":{"name":"recipe_id","type":"uuid","primaryKey":false,"notNull":true},"position":{"name":"position","type":"integer","primaryKey":false,"notNull":true},"text":{"name":"text","type":"text","primaryKey":false,"notNull":true}},"indexes":{},"foreignKeys":{"ingredients_recipe_id_recipes_id_fk":{"name":"ingredients_recipe_id_recipes_id_fk","tableFrom":"ingredients","tableTo":"recipes","columnsFrom":["recipe_id"],"columnsTo":["id"],"onDelete":"cascade","onUpdate":"no action"}},"compositePrimaryKeys":{"ingredients_recipe_id_position_pk":{"name":"ingredients_recipe_id_position_pk","columns":["recipe_id","position"]}},"uniqueConstraints":{},"policies":{},"checkConstraints":{},"isRLSEnabled":false},"public.recipe_shares":{"name":"recipe_shares","schema":"","columns":{"recipe_id":{"name":"recipe_id","type":"uuid","primaryKey":true,"notNull":true},"share_id":{"name":"share_id","type":"uuid","primaryKey":false,"notNull":true},"created_at":{"name":"created_at","type":"timestamp with time zone","primaryKey":false,"notNull":true,"default":"now()"}},"indexes":{},"foreignKeys":{"recipe_shares_recipe_id_recipes_id_fk":{"name":"recipe_shares_recipe_id_recipes_id_fk","tableFrom":"recipe_shares","tableTo":"recipes","columnsFrom":["recipe_id"],"columnsTo":["id"],"onDelete":"cascade","onUpdate":"no action"}},"compositePrimaryKeys":{},"uniqueConstraints":{"recipe_shares_share_id_unique":{"name":"recipe_shares_share_id_unique","nullsNotDistinct":false,"columns":["share_id"]}},"policies":{},"checkConstraints":{},"isRLSEnabled":false},"public.recipes":{"name":"recipes","schema":"","columns":{"id":{"name":"id","type":"uuid","primaryKey":true,"notNull":true},"owner_id":{"name":"owner_id","type":"text","primaryKey":false,"notNull":true},"title":{"name":"title","type":"text","primaryKey":false,"notNull":true},"description":{"name":"description","type":"text","primaryKey":false,"notNull":true,"default":"''"},"source_url":{"name":"source_url","type":"text","primaryKey":false,"notNull":true,"default":"''"},"image_url":{"name":"image_url","type":"text","primaryKey":false,"notNull":true,"default":"''"},"servings":{"name":"servings","type":"text","primaryKey":false,"notNull":true,"default":"''"},"prep_minutes":{"name":"prep_minutes","type":"integer","primaryKey":false,"notNull":false},"cook_minutes":{"name":"cook_minutes","type":"integer","primaryKey":false,"notNull":false},"notes":{"name":"notes","type":"text","primaryKey":false,"notNull":true,"default":"''"},"favorite":{"name":"favorite","type":"boolean","primaryKey":false,"notNull":true,"default":false},"created_at":{"name":"created_at","type":"timestamp with time zone","primaryKey":false,"notNull":true,"default":"now()"},"updated_at":{"name":"updated_at","type":"timestamp with time zone","primaryKey":false,"notNull":true,"default":"now()"}},"indexes":{"recipes_owner_updated":{"name":"recipes_owner_updated","columns":[{"expression":"owner_id","isExpression":false,"asc":true,"nulls":"last"},{"expression":"updated_at","isExpression":false,"asc":false,"nulls":"last"}],"isUnique":false,"concurrently":false,"method":"btree","with":{}}},"foreignKeys":{},"compositePrimaryKeys":{},"uniqueConstraints":{},"policies":{},"checkConstraints":{},"isRLSEnabled":false},"public.steps":{"name":"steps","schema":"","columns":{"recipe_id":{"name":"recipe_id","type":"uuid","primaryKey":false,"notNull":true},"position":{"name":"position","type":"integer","primaryKey":false,"notNull":true},"text":{"name":"text","type":"text","primaryKey":false,"notNull":true}},"indexes":{},"foreignKeys":{"steps_recipe_id_recipes_id_fk":{"name":"steps_recipe_id_recipes_id_fk","tableFrom":"steps","tableTo":"recipes","columnsFrom":["recipe_id"],"columnsTo":["id"],"onDelete":"cascade","onUpdate":"no action"}},"compositePrimaryKeys":{"steps_recipe_id_position_pk":{"name":"steps_recipe_id_position_pk","columns":["recipe_id","position"]}},"uniqueConstraints":{},"policies":{},"checkConstraints":{},"isRLSEnabled":false},"public.tags":{"name":"tags","schema":"","columns":{"recipe_id":{"name":"recipe_id","type":"uuid","primaryKey":false,"notNull":true},"tag":{"name":"tag","type":"text","primaryKey":false,"notNull":true}},"indexes":{"tags_tag":{"name":"tags_tag","columns":[{"expression":"lower(\"tag\")","asc":true,"isExpression":true,"nulls":"last"}],"isUnique":false,"concurrently":false,"method":"btree","with":{}}},"foreignKeys":{"tags_recipe_id_recipes_id_fk":{"name":"tags_recipe_id_recipes_id_fk","tableFrom":"tags","tableTo":"recipes","columnsFrom":["recipe_id"],"columnsTo":["id"],"onDelete":"cascade","onUpdate":"no action"}},"compositePrimaryKeys":{"tags_recipe_id_tag_pk":{"name":"tags_recipe_id_tag_pk","columns":["recipe_id","tag"]}},"uniqueConstraints":{},"policies":{},"checkConstraints":{},"isRLSEnabled":false}},"enums":{},"schemas":{},"sequences":{},"roles":{},"policies":{},"views":{},"_meta":{"columns":{},"schemas":{},"tables":{}}}
+{
+  "id": "6cfc49fc-601e-4627-b041-777b5f44980e",
+  "prevId": "0c7538ad-5019-4323-ba65-597979ac9c73",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.api_tokens": {
+      "name": "api_tokens",
+      "schema": "",
+      "columns": {
+        "id": { "name": "id", "type": "uuid", "primaryKey": true, "notNull": true },
+        "household_id": {
+          "name": "household_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": { "name": "user_id", "type": "text", "primaryKey": false, "notNull": true },
+        "label": { "name": "label", "type": "text", "primaryKey": false, "notNull": true },
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "permission": {
+          "name": "permission",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_used_at": {
+          "name": "last_used_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "revoked_at": {
+          "name": "revoked_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "api_tokens_owner_created": {
+          "name": "api_tokens_owner_created",
+          "columns": [
+            { "expression": "household_id", "isExpression": false, "asc": true, "nulls": "last" },
+            { "expression": "user_id", "isExpression": false, "asc": true, "nulls": "last" },
+            { "expression": "created_at", "isExpression": false, "asc": false, "nulls": "last" }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "api_tokens_token_hash_unique": {
+          "name": "api_tokens_token_hash_unique",
+          "nullsNotDistinct": false,
+          "columns": ["token_hash"]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "api_tokens_permission_check": {
+          "name": "api_tokens_permission_check",
+          "value": "\"api_tokens\".\"permission\" IN ('read', 'write')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.ingredients": {
+      "name": "ingredients",
+      "schema": "",
+      "columns": {
+        "recipe_id": { "name": "recipe_id", "type": "uuid", "primaryKey": false, "notNull": true },
+        "position": { "name": "position", "type": "integer", "primaryKey": false, "notNull": true },
+        "text": { "name": "text", "type": "text", "primaryKey": false, "notNull": true }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ingredients_recipe_id_recipes_id_fk": {
+          "name": "ingredients_recipe_id_recipes_id_fk",
+          "tableFrom": "ingredients",
+          "tableTo": "recipes",
+          "columnsFrom": ["recipe_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "ingredients_recipe_id_position_pk": {
+          "name": "ingredients_recipe_id_position_pk",
+          "columns": ["recipe_id", "position"]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.recipe_shares": {
+      "name": "recipe_shares",
+      "schema": "",
+      "columns": {
+        "recipe_id": { "name": "recipe_id", "type": "uuid", "primaryKey": true, "notNull": true },
+        "share_id": { "name": "share_id", "type": "uuid", "primaryKey": false, "notNull": true },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "recipe_shares_recipe_id_recipes_id_fk": {
+          "name": "recipe_shares_recipe_id_recipes_id_fk",
+          "tableFrom": "recipe_shares",
+          "tableTo": "recipes",
+          "columnsFrom": ["recipe_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "recipe_shares_share_id_unique": {
+          "name": "recipe_shares_share_id_unique",
+          "nullsNotDistinct": false,
+          "columns": ["share_id"]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.recipes": {
+      "name": "recipes",
+      "schema": "",
+      "columns": {
+        "id": { "name": "id", "type": "uuid", "primaryKey": true, "notNull": true },
+        "owner_id": { "name": "owner_id", "type": "text", "primaryKey": false, "notNull": true },
+        "title": { "name": "title", "type": "text", "primaryKey": false, "notNull": true },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "source_url": {
+          "name": "source_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "servings": {
+          "name": "servings",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "prep_minutes": {
+          "name": "prep_minutes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cook_minutes": {
+          "name": "cook_minutes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "favorite": {
+          "name": "favorite",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "recipes_owner_updated": {
+          "name": "recipes_owner_updated",
+          "columns": [
+            { "expression": "owner_id", "isExpression": false, "asc": true, "nulls": "last" },
+            { "expression": "updated_at", "isExpression": false, "asc": false, "nulls": "last" }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.steps": {
+      "name": "steps",
+      "schema": "",
+      "columns": {
+        "recipe_id": { "name": "recipe_id", "type": "uuid", "primaryKey": false, "notNull": true },
+        "position": { "name": "position", "type": "integer", "primaryKey": false, "notNull": true },
+        "text": { "name": "text", "type": "text", "primaryKey": false, "notNull": true }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "steps_recipe_id_recipes_id_fk": {
+          "name": "steps_recipe_id_recipes_id_fk",
+          "tableFrom": "steps",
+          "tableTo": "recipes",
+          "columnsFrom": ["recipe_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "steps_recipe_id_position_pk": {
+          "name": "steps_recipe_id_position_pk",
+          "columns": ["recipe_id", "position"]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.tags": {
+      "name": "tags",
+      "schema": "",
+      "columns": {
+        "recipe_id": { "name": "recipe_id", "type": "uuid", "primaryKey": false, "notNull": true },
+        "tag": { "name": "tag", "type": "text", "primaryKey": false, "notNull": true }
+      },
+      "indexes": {
+        "tags_tag": {
+          "name": "tags_tag",
+          "columns": [
+            { "expression": "lower(\"tag\")", "asc": true, "isExpression": true, "nulls": "last" }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "tags_recipe_id_recipes_id_fk": {
+          "name": "tags_recipe_id_recipes_id_fk",
+          "tableFrom": "tags",
+          "tableTo": "recipes",
+          "columnsFrom": ["recipe_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "tags_recipe_id_tag_pk": {
+          "name": "tags_recipe_id_tag_pk",
+          "columns": ["recipe_id", "tag"]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": { "columns": {}, "schemas": {}, "tables": {} }
+}
