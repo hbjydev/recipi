@@ -10,7 +10,8 @@
     "db:generate": "drizzle-kit generate",
     "test": "node scripts/test.mjs",
     "fmt": "oxfmt",
-    "fmt:check": "oxfmt --check"
+    "fmt:check": "oxfmt --check",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1137.0",

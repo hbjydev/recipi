@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   checks:
-    name: Format, lint, typecheck, and build
+    name: Format and lint
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -23,7 +23,13 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm run fmt:check
       - run: pnpm run lint
-      - run: pnpm exec tsc --noEmit
+
+  build:
+    name: Run a typecheck and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - run: pnpm run typecheck
       - run: pnpm run build
 
   tests:
